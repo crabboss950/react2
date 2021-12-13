@@ -2,6 +2,7 @@ import './app.css';
 import Habits from './components/habits';
 import React, { Component } from 'react';
 import Navbar from './components/navbar';
+import HabitAddForm from './components/habitAddForm';
 
 
 class App extends Component {
@@ -15,19 +16,25 @@ class App extends Component {
 
 handleIncrement = habit => {
   // console.log(`handleIncrement ${habit.name}`);
-  const habits = [...this.state.habits];
-  const index = habits.indexOf(habit);
-  habits[index].count++;
-  this.setState({habits: habits});
+  const habits = this.state.habit.map(item => {
+    if(item.id === habit.id){
+      return{...habit, count: habit.count + 1};
+     }
+     return item;
+  });
+  this.setState({habits});
 };
 
 handleDecrement = habit => {
   // console.log(`handleDelete ${habit.name}`);
-  const habits = [...this.state.habits];
-  const index = habits.indexOf(habit);
-  const count = habits[index].count -1;
-  habits[index].count = count < 0 ? 0 : count;
-  this.setState({habits: habits});
+  const habits = this.state.habit.map(item => {
+    if(item.id === habit.id){
+      const count = habit.count - 1;
+      return{...habit, count: count <0 ? 0:count};
+     }
+     return item;
+  });
+  this.setState({habits});
 };
 
 handleDelete = habit => {
@@ -42,7 +49,9 @@ handleAdd = name => {
 
 handleReset = () => {
   const habits = this.state.habits.map(habit =>{
-    habit.count = 0;
+    if(habit.count !==0){
+      return {...habit, count:0};
+    }
     return habit;
   });
   this.setState({habits});
